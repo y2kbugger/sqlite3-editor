@@ -291,8 +291,8 @@ export const useTableStore = createStore("useTableStore", {
                 set({ tableList: newTableList })
                 await setViewerQuery({ tableName: newTableName })
             } else {
-                // If the list of tables is not changed
-                await reloadTable(true, true)
+                // If the list of tables is not changed, skip reloading schema to reduce db lock pressure
+                await reloadTable(false, true)
             }
         },
     }
