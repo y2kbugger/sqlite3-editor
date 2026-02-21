@@ -16,9 +16,8 @@ def find_widget_regexp(text: str, pattern: str, whole_word: int, case_sensitive:
 
 class Server:
     def __init__(self, database_filepath: str):
-        self.readwrite_connection = sqlite3.connect(database_filepath, timeout=5.0)
-        self.readwrite_connection.execute("PRAGMA journal_mode=WAL").fetchone()
-        self.readonly_connection = sqlite3.connect("file:" + urllib.parse.quote(database_filepath) + "?mode=ro", uri=True, timeout=5.0)
+        self.readonly_connection = sqlite3.connect("file:" + urllib.parse.quote(database_filepath) + "?mode=ro", uri=True)
+        self.readwrite_connection = sqlite3.connect(database_filepath)
 
         if sys.version_info >= (3, 8, 3):  # `deterministic` is added in Python 3.8.3  https://docs.python.org/3/library/sqlite3.html#sqlite3.Connection.create_function
             self.readonly_connection.create_function("find_widget_regexp", 4, find_widget_regexp, deterministic=True)
