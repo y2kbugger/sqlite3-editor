@@ -22,8 +22,9 @@ class Server {
     private readonly readWriteConnection
 
     constructor(databaseFilepath: string) {
-        this.readonlyConnection = sqlite3(databaseFilepath, { readonly: true })
-        this.readWriteConnection = sqlite3(databaseFilepath)
+        this.readWriteConnection = sqlite3(databaseFilepath, { timeout: 5000 })
+        this.readWriteConnection.pragma("journal_mode = WAL")
+        this.readonlyConnection = sqlite3(databaseFilepath, { readonly: true, timeout: 5000 })
 
         this.readonlyConnection.defaultSafeIntegers()
         this.readWriteConnection.defaultSafeIntegers()
